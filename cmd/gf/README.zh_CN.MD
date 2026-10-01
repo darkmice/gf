@@ -60,6 +60,8 @@ CGO_ENABLED=1 go build -tags talon -o gf-talon .
 
 也可以在应用的 CLI 配置中将`gfcli.gen.dao.talonPath`设为数据库绝对路径。不要将`talonPath`与`-l`／`--link`同时使用；Talon 使用目录路径，而非数据库连接字符串。普通`gf`构建保留现有驱动与行为。
 
+使用生成的 DAO 查询时，应用还须导入`github.com/darkmice/talon-sdk-go/goframe`以注册驱动，并在 GoFrame 数据库分组中配置`Type: "talon"`和`Name: "/absolute/path/to/talon-data"`。CLI 进程中的驱动注册不会传递到应用进程。
+
 此构建使用 Talon SDK `v0.7.5`及其固定版本的签名原生运行时依赖`v0.1.54`。内嵌签名运行时无需设置`TALON_NATIVE_*`。若设置任何`TALON_NATIVE_*`变量，SDK 要求完整的显式信任策略；不完整时会拒绝加载。详见[Talon SDK 文档](https://github.com/darkmice/talon-sdk-go/blob/v0.7.5/README.md)。原生库契约覆盖`darwin/amd64`、`darwin/arm64`、`linux/amd64`和`linux/arm64`；其他平台不受支持。
 
 ## 2. 命令
