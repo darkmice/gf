@@ -35,6 +35,7 @@ You can also install `gf` tool using pre-built binaries: <https://github.com/gog
    | `sqlitecgo` | no | 32-bit `sqlite`: import in `cmd_gen_dao.go` and rebuild. |
    | `clickhouse` | yes | - |
    | `dm` | no | Import in `cmd_gen_dao.go` and rebuild. |
+   | `talon` | optional in this fork | Build with the `talon` tag and cgo; see below. |
 
 ## 2) Manually Install
 
@@ -42,6 +43,26 @@ You can also install `gf` tool using pre-built binaries: <https://github.com/gog
 go install github.com/gogf/gf/cmd/gf/v2@latest # latest version
 go install github.com/gogf/gf/cmd/gf/v2@v2.5.5 # certain version(should be >= v2.5.5)
 ```
+
+## Talon DAO generation in this fork
+
+This fork provides a separate `gf-talon` binary for generating DAO, DO, and entity code from an embedded Talon database. From this repository's `cmd/gf` directory, build it with cgo enabled:
+
+```shell
+CGO_ENABLED=1 go build -tags talon -o gf-talon .
+```
+
+Use an absolute Talon database directory and an existing GoFrame application root:
+
+```shell
+./gf-talon gen dao --talonPath /absolute/path/to/talon-data -p /absolute/path/to/app
+```
+
+Alternatively, set `gfcli.gen.dao.talonPath` to the absolute database path in the application's CLI configuration. Do not combine `talonPath` with `-l`/`--link`; Talon uses a directory path rather than a database connection link. The ordinary `gf` build retains its existing drivers and behavior.
+
+To query through the generated DAO, the application must also import `github.com/darkmice/talon-sdk-go/goframe` for driver registration and configure its GoFrame database group with `Type: "talon"` and `Name: "/absolute/path/to/talon-data"`. The CLI's driver registration does not carry into the application process.
+
+This build uses Talon SDK `v0.7.5` and its pinned signed native runtime dependency `v0.1.54`. The signed runtime works without `TALON_NATIVE_*` settings. If any `TALON_NATIVE_*` setting is supplied, the SDK requires a complete explicit trust policy and fails closed on a partial policy. See the [Talon SDK documentation](https://github.com/darkmice/talon-sdk-go/blob/v0.7.5/README.md). The native bundle contract covers `darwin/amd64`, `darwin/arm64`, `linux/amd64`, and `linux/arm64`; other platforms are unsupported.
 
 ## 2. Commands
 

@@ -4,6 +4,8 @@
 // If a copy of the MIT was not distributed with this file,
 // You can obtain one at https://github.com/gogf/gf.
 
+// This file defines help text and option tags for DAO generation.
+
 package gendao
 
 import (
@@ -18,6 +20,7 @@ const (
 	CGenDaoEg     = `
 gf gen dao
 gf gen dao -l "mysql:root:12345678@tcp(127.0.0.1:3306)/test"
+gf gen dao --talonPath /absolute/path/to/talon/database
 gf gen dao -p ./model -g user-center -t user,user_detail,user_login
 gf gen dao -r user_
 `
@@ -50,6 +53,7 @@ CONFIGURATION SUPPORT
 `
 	CGenDaoBriefPath              = `directory path for generated files`
 	CGenDaoBriefLink              = `database configuration, the same as the ORM configuration of GoFrame`
+	CGenDaoBriefTalonPath         = `absolute Talon native database path; requires a CLI built with -tags talon and cannot be combined with link`
 	CGenDaoBriefTables            = `generate models only for given tables, multiple table names separated with ','`
 	CGenDaoBriefTablesEx          = `generate models excluding given tables, multiple table names separated with ','`
 	CGenDaoBriefPrefix            = `add prefix for all table of specified link/database tables`
@@ -128,6 +132,7 @@ func init() {
 		`CGenDaoAd`:                      CGenDaoAd,
 		`CGenDaoBriefPath`:               CGenDaoBriefPath,
 		`CGenDaoBriefLink`:               CGenDaoBriefLink,
+		`CGenDaoBriefTalonPath`:          CGenDaoBriefTalonPath,
 		`CGenDaoBriefTables`:             CGenDaoBriefTables,
 		`CGenDaoBriefTablesEx`:           CGenDaoBriefTablesEx,
 		`CGenDaoBriefPrefix`:             CGenDaoBriefPrefix,
