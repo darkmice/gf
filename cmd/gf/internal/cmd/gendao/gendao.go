@@ -4,6 +4,8 @@
 // If a copy of the MIT was not distributed with this file,
 // You can obtain one at https://github.com/gogf/gf.
 
+// This file coordinates DAO generation from configured database sources.
+
 package gendao
 
 import (
@@ -38,6 +40,7 @@ type (
 		g.Meta             `name:"dao" config:"{CGenDaoConfig}" usage:"{CGenDaoUsage}" brief:"{CGenDaoBrief}" eg:"{CGenDaoEg}" ad:"{CGenDaoAd}"`
 		Path               string   `name:"path"                short:"p"  brief:"{CGenDaoBriefPath}" d:"internal"`
 		Link               string   `name:"link"                short:"l"  brief:"{CGenDaoBriefLink}"`
+		TalonPath          string   `name:"talonPath"                      brief:"{CGenDaoBriefTalonPath}"`
 		Tables             string   `name:"tables"              short:"t"  brief:"{CGenDaoBriefTables}"`
 		TablesEx           string   `name:"tablesEx"            short:"x"  brief:"{CGenDaoBriefTablesEx}"`
 		ShardingPattern    []string `name:"shardingPattern"     short:"sp" brief:"{CGenDaoBriefShardingPattern}"`
@@ -129,7 +132,7 @@ var (
 
 func (c CGenDao) Dao(ctx context.Context, in CGenDaoInput) (out *CGenDaoOutput, err error) {
 	in.genItems = newCGenDaoInternalGenItems()
-	if in.Link != "" {
+	if in.Link != "" || in.TalonPath != "" {
 		doGenDaoForArray(ctx, -1, in)
 	} else if g.Cfg().Available(ctx) {
 		v := g.Cfg().MustGet(ctx, CGenDaoConfig)
@@ -169,7 +172,11 @@ func doGenDaoForArray(ctx context.Context, index int, in CGenDaoInput) {
 	removePrefixArray := gstr.SplitAndTrim(in.RemovePrefix, ",")
 
 	// It uses user passed database configuration.
-	if in.Link != "" {
+	if in.TalonPath != "" {
+		if db, err = newTalonDatabase(in.TalonPath, in.Link); err != nil {
+			mlog.Fatalf(`database initialization failed: %+v`, err)
+		}
+	} else if in.Link != "" {
 		var tempGroup = gtime.TimestampNanoStr()
 		err = gdb.AddConfigNode(tempGroup, gdb.ConfigNode{
 			Link: in.Link,

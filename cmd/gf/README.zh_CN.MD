@@ -35,6 +35,7 @@
    | `sqlitecgo` | 否 | 32 位`sqlite`：在`cmd_gen_dao.go`中导入后重新构建。 |
    | `clickhouse` | 是 | - |
    | `dm` | 否 | 在`cmd_gen_dao.go`中导入后重新构建。 |
+   | `talon` | 此 fork 可选支持 | 启用`talon`构建标签和 cgo；见下文。 |
 
 ## 2）手动安装
 
@@ -42,6 +43,24 @@
 go install github.com/gogf/gf/cmd/gf/v2@latest # 最新版本
 go install github.com/gogf/gf/cmd/gf/v2@v2.5.5 # 特定版本(应该 >= v2.5.5)
 ```
+
+## 此 fork 的 Talon DAO 生成
+
+此 fork 提供独立的`gf-talon`二进制文件，可从内嵌式 Talon 数据库生成 DAO、DO 和 entity 代码。在本仓库的`cmd/gf`目录下启用 cgo 构建：
+
+```shell
+CGO_ENABLED=1 go build -tags talon -o gf-talon .
+```
+
+指定 Talon 数据库目录的绝对路径，以及现有 GoFrame 应用的根目录：
+
+```shell
+./gf-talon gen dao --talonPath /absolute/path/to/talon-data -p /absolute/path/to/app
+```
+
+也可以在应用的 CLI 配置中将`gfcli.gen.dao.talonPath`设为数据库绝对路径。不要将`talonPath`与`-l`／`--link`同时使用；Talon 使用目录路径，而非数据库连接字符串。普通`gf`构建保留现有驱动与行为。
+
+此构建使用 Talon SDK `v0.7.5`及其固定版本的签名原生运行时依赖`v0.1.54`。内嵌签名运行时无需设置`TALON_NATIVE_*`。若设置任何`TALON_NATIVE_*`变量，SDK 要求完整的显式信任策略；不完整时会拒绝加载。详见[Talon SDK 文档](https://github.com/darkmice/talon-sdk-go/blob/v0.7.5/README.md)。原生库契约覆盖`darwin/amd64`、`darwin/arm64`、`linux/amd64`和`linux/arm64`；其他平台不受支持。
 
 ## 2. 命令
 

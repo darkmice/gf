@@ -7,6 +7,7 @@ require (
 	github.com/charmbracelet/bubbletea v1.3.6
 	github.com/charmbracelet/huh v1.0.0
 	github.com/charmbracelet/lipgloss v1.1.0
+	github.com/darkmice/talon-sdk-go v0.7.5
 	github.com/gogf/gf/contrib/drivers/clickhouse/v2 v2.10.3
 	github.com/gogf/gf/contrib/drivers/dm/v2 v2.10.3
 	github.com/gogf/gf/contrib/drivers/mssql/v2 v2.10.3
@@ -36,6 +37,7 @@ require (
 	github.com/charmbracelet/x/exp/strings v0.0.0-20240722160745-212f7b056ed0 // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
 	github.com/clbanning/mxj/v2 v2.7.0 // indirect
+	github.com/darkmice/talon-bin/go-runtime v0.1.54 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/emirpasic/gods/v2 v2.0.0-alpha // indirect
 	github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f // indirect
